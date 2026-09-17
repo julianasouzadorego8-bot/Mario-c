@@ -1,0 +1,394 @@
+<!DOCTYPE html>  <html lang="pt-BR">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Meus Lembretes</title>  
+    <style>  
+        * {  
+            margin: 0;  
+            padding: 0;  
+            box-sizing: border-box;  
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
+        }  body {  
+        background-color: #f4f7f6;  
+        color: #333;  
+        display: flex;  
+        justify-content: center;  
+        padding: 20px;  
+        min-height: 100vh;  
+    }  
+
+    .app {  
+        background: #ffffff;  
+        width: 100%;  
+        max-width: 500px;  
+        padding: 25px;  
+        border-radius: 12px;  
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);  
+        display: flex;  
+        flex-direction: column;  
+        gap: 20px;  
+    }  
+
+    header h1 {  
+        font-size: 1.8rem;  
+        color: #2c3e50;  
+    }  
+
+    header p {  
+        font-size: 0.9rem;  
+        color: #7f8c8d;  
+        margin-top: 5px;  
+    }  
+
+    .formulario {  
+        display: flex;  
+        flex-direction: column;  
+        gap: 10px;  
+    }  
+
+    input[type="text"] {  
+        width: 100%;  
+        padding: 12px;  
+        border: 1px solid #ddd;  
+        border-radius: 8px;  
+        font-size: 0.95rem;  
+        outline: none;  
+        transition: border-color 0.2s;  
+    }  
+
+    input:focus {  
+        border-color: #3498db;  
+    }  
+
+    .data-hora {  
+        display: flex;  
+        gap: 10px;  
+    }  
+
+    button#btnSalvar {  
+        background-color: #3498db;  
+        color: white;  
+        border: none;  
+        padding: 12px;  
+        border-radius: 8px;  
+        font-size: 1rem;  
+        font-weight: bold;  
+        cursor: pointer;  
+        transition: background 0.2s;  
+    }  
+
+    button#btnSalvar:hover {  
+        background-color: #2980b9;  
+    }  
+
+    .filtros {  
+        display: flex;  
+        gap: 8px;  
+        overflow-x: auto;  
+        padding-bottom: 5px;  
+    }  
+
+    .filtro {  
+        background-color: #edf2f7;  
+        border: none;  
+        padding: 8px 14px;  
+        border-radius: 20px;  
+        font-size: 0.85rem;  
+        cursor: pointer;  
+        color: #4a5568;  
+        white-space: nowrap;  
+        transition: all 0.2s;  
+    }  
+
+    .filtro.ativo {  
+        background-color: #3498db;  
+        color: white;  
+    }  
+
+    .destaque {  
+        background-color: #e3f2fd;  
+        border-left: 4px solid #2196f3;  
+        padding: 12px 15px;  
+        border-radius: 6px;  
+    }  
+
+    .destaque h2 {  
+        font-size: 1rem;  
+        color: #0d47a1;  
+        margin-bottom: 5px;  
+    }  
+
+    #lembreteHoje {  
+        font-size: 0.9rem;  
+        color: #1565c0;  
+    }  
+
+    ul {  
+        list-style: none;  
+        display: flex;  
+        flex-direction: column;  
+        gap: 10px;  
+    }  
+
+    li {  
+        background-color: #f8f9fa;  
+        border: 1px solid #e9ecef;  
+        padding: 12px;  
+        border-radius: 8px;  
+        display: flex;  
+        align-items: center;  
+        justify-content: space-between;  
+        gap: 10px;  
+        transition: background 0.2s;  
+    }  
+
+    li.concluido {  
+        background-color: #e8f5e9;  
+        opacity: 0.7;  
+    }  
+
+    li.concluido .texto {  
+        text-decoration: line-through;  
+        color: #666;  
+    }  
+
+    .info {  
+        display: flex;  
+        flex-direction: column;  
+        gap: 3px;  
+        flex-grow: 1;  
+    }  
+
+    .texto {  
+        font-weight: 500;  
+        word-break: break-word;  
+    }  
+
+    .detalhes {  
+        font-size: 0.78rem;  
+        color: #888;  
+    }  
+
+    .acoes {  
+        display: flex;  
+        gap: 6px;  
+    }  
+
+    .acoes button {  
+        border: none;  
+        background: none;  
+        cursor: pointer;  
+        font-size: 1.1rem;  
+        padding: 4px;  
+        border-radius: 4px;  
+    }  
+
+    .acoes button:hover {  
+        background-color: #e2e8f0;  
+    }  
+</style>
+
+</head>  <body>  <div class="app">  
+
+    <header>  
+        <h1>📝 Meus Lembretes</h1>  
+        <p>Organize suas tarefas e não esqueça de nada.</p>  
+    </header>  
+
+    <section class="formulario">  
+        <input type="text" id="textoLembrete" placeholder="Digite um lembrete...">  
+        <div class="data-hora">  
+            <input type="text" id="dataLembrete" placeholder="Data (DD/MM/AAAA)" maxlength="10">  
+            <input type="text" id="horaLembrete" placeholder="Hora (HH:MM)" maxlength="5">  
+        </div>  
+        <button id="btnSalvar">Salvar lembrete</button>  
+    </section>  
+
+    <section class="filtros">  
+        <button class="filtro ativo" data-filtro="todos">Todos</button>  
+        <button class="filtro" data-filtro="hoje">Hoje</button>  
+        <button class="filtro" data-filtro="pendentes">Pendentes</button>  
+        <button class="filtro" data-filtro="concluidos">Concluídos</button>  
+    </section>  
+
+    <section class="destaque">  
+        <h2>🔔 Lembrete de hoje</h2>  
+        <div id="lembreteHoje">  
+            Nenhum lembrete para hoje.  
+        </div>  
+    </section>  
+
+    <section>  
+        <ul id="listaLembretes"></ul>  
+    </section>  
+
+</div>  
+
+<script>  
+    document.addEventListener('DOMContentLoaded', () => {  
+        const textoInput = document.getElementById('textoLembrete');  
+        const dataInput = document.getElementById('dataLembrete');  
+        const horaInput = document.getElementById('horaLembrete');  
+        const btnSalvar = document.getElementById('btnSalvar');  
+        const listaLembretes = document.getElementById('listaLembretes');  
+        const lembreteHojeContainer = document.getElementById('lembreteHoje');  
+        const botoesFiltro = document.querySelectorAll('.filtro');  
+
+        let lembretes = JSON.parse(localStorage.getItem('lembretes')) || [];  
+        let filtroAtual = 'todos';  
+
+        // Máscara automática para a data (coloca as barras automaticamente)  
+        dataInput.addEventListener('input', (e) => {  
+            let v = e.target.value.replace(/\D/g, '');  
+            if (v.length > 8) v = v.slice(0, 8);  
+            if (v.length >= 5) {  
+                e.target.value = `${v.slice(0, 2)}/${v.slice(2, 4)}/${v.slice(4)}`;  
+            } else if (v.length >= 3) {  
+                e.target.value = `${v.slice(0, 2)}/${v.slice(2)}`;  
+            } else {  
+                e.target.value = v;  
+            }  
+        });  
+
+        // Máscara automática para a hora (coloca os dois pontos automaticamente)  
+        horaInput.addEventListener('input', (e) => {  
+            let v = e.target.value.replace(/\D/g, '');  
+            if (v.length > 4) v = v.slice(0, 4);  
+            if (v.length >= 3) {  
+                e.target.value = `${v.slice(0, 2)}:${v.slice(2)}`;  
+            } else {  
+                e.target.value = v;  
+            }  
+        });  
+
+        function salvarStorage() {  
+            localStorage.setItem('lembretes', JSON.stringify(lembretes));  
+        }  
+
+        function adicionarLembrete() {  
+            const texto = textoInput.value.trim();  
+            const data = dataInput.value.trim();  
+            const hora = horaInput.value.trim();  
+
+            if (!texto) {  
+                alert('Por favor, digite uma descrição para o lembrete.');  
+                return;  
+            }  
+
+            const novoLembrete = {  
+                id: Date.now(),  
+                texto,  
+                data,  
+                hora,  
+                concluido: false  
+            };  
+
+            lembretes.push(novoLembrete);  
+            salvarStorage();  
+            limparFormulario();  
+            renderizar();  
+        }  
+
+        function limparFormulario() {  
+            textoInput.value = '';  
+            dataInput.value = '';  
+            horaInput.value = '';  
+        }  
+
+        window.alternarConcluido = function(id) {  
+            lembretes = lembretes.map(item => {  
+                if (item.id === id) {  
+                    return { ...item, concluido: !item.concluido };  
+                }  
+                return item;  
+            });  
+            salvarStorage();  
+            renderizar();  
+        };  
+
+        window.deletarLembrete = function(id) {  
+            lembretes = lembretes.filter(item => item.id !== id);  
+            salvarStorage();  
+            renderizar();  
+        };  
+
+        function obterDataHojeFormatada() {  
+            const hoje = new Date();  
+            const dia = String(hoje.getDate()).padStart(2, '0');  
+            const mes = String(hoje.getMonth() + 1).padStart(2, '0');  
+            const ano = hoje.getFullYear();  
+            return `${dia}/${mes}/${ano}`;  
+        }  
+
+        function atualizarDestaqueHoje() {  
+            const dataHoje = obterDataHojeFormatada();  
+            const deHoje = lembretes.filter(l => l.data === dataHoje && !l.concluido);  
+
+            if (deHoje.length === 0) {  
+                lembreteHojeContainer.textContent = 'Nenhum lembrete pendente para hoje.';  
+            } else {  
+                lembreteHojeContainer.innerHTML = deHoje.map(l => `  
+                    <div style="margin-bottom: 4px;">📌 <strong>${l.texto}</strong> ${l.hora ? `às ${l.hora}` : ''}</div>  
+                `).join('');  
+            }  
+        }  
+
+        function renderizar() {  
+            listaLembretes.innerHTML = '';  
+            const dataHoje = obterDataHojeFormatada();  
+
+            const lembretesFiltrados = lembretes.filter(l => {  
+                if (filtroAtual === 'hoje') return l.data === dataHoje;  
+                if (filtroAtual === 'pendentes') return !l.concluido;  
+                if (filtroAtual === 'concluidos') return l.concluido;  
+                return true;  
+            });  
+
+            if (lembretesFiltrados.length === 0) {  
+                listaLembretes.innerHTML = '<li style="justify-content: center; color: #888;">Nenhum lembrete encontrado.</li>';  
+            } else {  
+                lembretesFiltrados.forEach(l => {  
+                    const li = document.createElement('li');  
+                    if (l.concluido) li.classList.add('concluido');  
+
+                    const dataExibicao = l.data ? `📅 ${l.data}` : '';  
+                    const horaExibicao = l.hora ? `⏰ ${l.hora}` : '';  
+
+                    li.innerHTML = `  
+                        <div class="info">  
+                            <span class="texto">${l.texto}</span>  
+                            ${(dataExibicao || horaExibicao) ? `<span class="detalhes">${dataExibicao} ${horaExibicao}</span>` : ''}  
+                        </div>  
+                        <div class="acoes">  
+                            <button onclick="alternarConcluido(${l.id})" title="Marcar como concluído">  
+                                ${l.concluido ? '↩️' : '✅'}  
+                            </button>  
+                            <button onclick="deletarLembrete(${l.id})" title="Excluir">🗑️</button>  
+                        </div>  
+                    `;  
+
+                    listaLembretes.appendChild(li);  
+                });  
+            }  
+
+            atualizarDestaqueHoje();  
+        }  
+
+        btnSalvar.addEventListener('click', adicionarLembrete);  
+
+        botoesFiltro.forEach(btn => {  
+            btn.addEventListener('click', () => {  
+                botoesFiltro.forEach(b => b.classList.remove('ativo'));  
+                btn.classList.add('ativo');  
+                filtroAtual = btn.dataset.filtro;  
+                renderizar();  
+            });  
+        });  
+
+        renderizar();  
+    });  
+</script>
+
+</body>  
+</html>
